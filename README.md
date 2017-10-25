@@ -15,7 +15,8 @@
 	'providers' => [
 	    ...
 	    Nox0121\MysqlCommand\MysqlCommandServiceProvider::class,
-		Nox0121\LaravelUtilityCommand\LaravelUtilityCommandServiceProvider::class,
+	    Nox0121\LaravelEnvSyncCommand\LaravelEnvSyncCommandServiceProvider::class,
+	    Nox0121\LaravelUtilityCommand\LaravelUtilityCommandServiceProvider::class,
 	    ...
 	];
 
@@ -27,3 +28,4 @@
 4. `php artisan mysql:create-database` - 根據 .env 設定，建立資料庫。
 5. `php artisan mysql:dump-database` - 根據 .env 的資料庫及 `APP_STORAGE_PATH` 設定，傾倒資料庫。
 6. `php artisan mysql:mysql:restore-database` - 根據 .env 的資料庫及 `APP_STORAGE_PATH` 設定，還原資料庫。
+7. `php artisan env:sync {source} {destination}` - 同步 .env 設定檔。
