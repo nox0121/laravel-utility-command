@@ -5,6 +5,7 @@
 目前包含了以下套件：
 
 * [Mysql Command](https://github.com/nox0121/mysql-command)
+* [EnvSync Command](https://github.com/nox0121/laravel-env-sync-command)
 
 ### 安裝方式
 
