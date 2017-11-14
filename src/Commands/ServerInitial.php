@@ -31,8 +31,8 @@ class ServerInitial extends Command
         $env = $this->option('env') ? ' --env='. $this->option('env') : '';
 
         $this->runArtisan('mysql:create-database');
-        $this->runArtisan('migrate', ["--env" => "local"]);
-        $this->runArtisan('db:seed', ["--env" => "local", "--class" => "ReleaseSeeder"]);
+        $this->runArtisan('migrate', ["--force" => true]);
+        $this->runArtisan('db:seed', ["--force" => true, "--class" => "ReleaseSeeder"]);
     }
 
     /**
