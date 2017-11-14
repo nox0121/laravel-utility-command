@@ -5,6 +5,7 @@ namespace Nox0121\LaravelUtilityCommand\Commands;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Artisan;
 
 class ServerInitial extends Command
 {
@@ -29,10 +30,11 @@ class ServerInitial extends Command
     {
         $env = $this->option('env') ? ' --env='. $this->option('env') : '';
 
-        $this->runExec('php artisan mysql:create-database');
-        $this->runExec('php artisan migrate --env=local');
-        $this->runExec('php artisan db:seed --class=ReleaseSeeder --env=local');
+        $this->runArtisan('mysql:create-database');
+        $this->runArtisan('migrate', ["--env" => "local"]);
+        $this->runArtisan('db:seed', ["--env" => "local", "--class" => "ReleaseSeeder"]);
     }
+
     /**
      * Get the console command options.
      *
@@ -44,23 +46,29 @@ class ServerInitial extends Command
             array('env', null, InputOption::VALUE_OPTIONAL, 'Environment to pass to migrate command')
         );
     }
+
     /**
-     * Utility function to run exec()
+     * Run an Artisan console command by name.
      *
-     * @return mixed
+     * @param  string  $command
+     * @param  array  $parameters
+     * @return int
      */
-    private function runExec($command)
+    private function runArtisan($command, array $parameters = [])
     {
         $this->comment('Running command: '. $command);
-        exec($command, $output, $return);
+
+        $result = Artisan::call($command, $parameters);
+        $output = Artisan::output();
+
         if (!empty($output)) {
-            foreach ($output as $line) {
-                if ($return !== false) {
-                    $this->info($line);
-                } else {
-                    $this->error($line);
-                }
+            if ($result !== false) {
+                $this->info($output);
+            } else {
+                $this->error($output);
             }
         }
+
+        return $result;
     }
 }

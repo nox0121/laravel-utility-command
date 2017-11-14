@@ -5,6 +5,7 @@ namespace Nox0121\LaravelUtilityCommand\Commands;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Artisan;
 
 class ServerNoOptimize extends Command
 {
@@ -29,13 +30,14 @@ class ServerNoOptimize extends Command
     {
         $env = $this->option('env') ? ' --env='. $this->option('env') : '';
 
-        $this->runExec('php artisan clear-compiled');
-        $this->runExec('php artisan route:clear');
-        $this->runExec('php artisan view:clear');
-        $this->runExec('php artisan config:clear');
-        $this->runExec('php artisan cache:clear');
-        $this->runExec('php artisan key:generate');
+        $this->runArtisan('clear-compiled');
+        $this->runArtisan('route:clear');
+        $this->runArtisan('view:clear');
+        $this->runArtisan('config:clear');
+        $this->runArtisan('cache:clear');
+        $this->runArtisan('key:generate');
     }
+
     /**
      * Get the console command options.
      *
@@ -47,23 +49,29 @@ class ServerNoOptimize extends Command
             array('env', null, InputOption::VALUE_OPTIONAL, 'Environment to pass to migrate command')
         );
     }
+
     /**
-     * Utility function to run exec()
+     * Run an Artisan console command by name.
      *
-     * @return mixed
+     * @param  string  $command
+     * @param  array  $parameters
+     * @return int
      */
-    private function runExec($command)
+    private function runArtisan($command, array $parameters = [])
     {
         $this->comment('Running command: '. $command);
-        exec($command, $output, $return);
+
+        $result = Artisan::call($command, $parameters);
+        $output = Artisan::output();
+
         if (!empty($output)) {
-            foreach ($output as $line) {
-                if ($return !== false) {
-                    $this->info($line);
-                } else {
-                    $this->error($line);
-                }
+            if ($result !== false) {
+                $this->info($output);
+            } else {
+                $this->error($output);
             }
         }
+
+        return $result;
     }
 }
