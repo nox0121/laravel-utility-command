@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace Nox0121\LaravelUtilityCommand\Commands;
 
 use Illuminate\Console\Command;
 use Exception;
