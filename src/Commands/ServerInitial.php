@@ -10,27 +10,39 @@ use Artisan;
 class ServerInitial extends Command
 {
     /**
-     * The console command name.
+     * The name and signature of the console command.
      *
      * @var string
      */
-    protected $name = 'server:initial';
+    protected $signature = 'server:initial';
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Run a serial scripts for initialization';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * Execute the console command.
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         $env = $this->option('env') ? ' --env='. $this->option('env') : '';
 
-        $this->runArtisan('mysql:create-database');
+        $this->runArtisan('db:create');
         $this->runArtisan('migrate', ["--force" => true]);
         $this->runArtisan('db:seed', ["--force" => true, "--class" => "ReleaseSeeder"]);
     }

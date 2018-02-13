@@ -10,23 +10,35 @@ use Artisan;
 class ServerOptimize extends Command
 {
     /**
-     * The console command name.
+     * The name and signature of the console command.
      *
      * @var string
      */
-    protected $name = 'server:optimize';
+    protected $signature = 'server:optimize';
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Run a serial scripts for optimization';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * Execute the console command.
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         $env = $this->option('env') ? ' --env='. $this->option('env') : '';
 
@@ -35,11 +47,28 @@ class ServerOptimize extends Command
         $this->runArtisan('view:clear');
         $this->runArtisan('config:clear');
         $this->runArtisan('cache:clear');
-        $this->runArtisan('key:generate');
+        $this->runArtisan('key:generate', ["--force" => true]);
         $this->runArtisan('route:cache');
-        $this->runArtisan('api:cache');
+
+        if ($this->commandExists('api:cache')) {
+            $this->runArtisan('api:cache');
+        }
+
         $this->runArtisan('config:cache');
-        $this->runArtisan('optimize', ["--force" => true]);
+
+        if ($this->commandExists('optimize')) {
+            $this->runArtisan('optimize', ["--force" => true]);
+        }
+    }
+
+    /**
+     * Check if command exists
+     *
+     * @return array
+     */
+    public function commandExists($name)
+    {
+        return array_has(Artisan::all(), $name);
     }
 
     /**

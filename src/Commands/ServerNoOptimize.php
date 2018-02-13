@@ -10,23 +10,35 @@ use Artisan;
 class ServerNoOptimize extends Command
 {
     /**
-     * The console command name.
+     * The name and signature of the console command.
      *
      * @var string
      */
-    protected $name = 'server:no-optimize';
+    protected $signature = 'server:no-optimize';
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Run a serial scripts for stop optimization';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * Execute the console command.
      *
      * @return mixed
      */
-    public function fire()
+    public function handle()
     {
         $env = $this->option('env') ? ' --env='. $this->option('env') : '';
 
@@ -35,7 +47,7 @@ class ServerNoOptimize extends Command
         $this->runArtisan('view:clear');
         $this->runArtisan('config:clear');
         $this->runArtisan('cache:clear');
-        $this->runArtisan('key:generate');
+        $this->runArtisan('key:generate', ["--force" => true]);
     }
 
     /**

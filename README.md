@@ -4,18 +4,16 @@
 
 目前包含了以下套件：
 
-* [Mysql Command](https://github.com/nox0121/mysql-command)
 * [EnvSync Command](https://github.com/nox0121/laravel-env-sync-command)
 
 ### 安裝方式
 
 `composer require nox0121/laravel-utility-command`
 
-### 設定 app.confg
+### 設定 app.confg (Laravel 5.5 以上版本不需設定)
 
 	'providers' => [
 	    ...
-	    Nox0121\MysqlCommand\MysqlCommandServiceProvider::class,
 	    Nox0121\LaravelEnvSyncCommand\LaravelEnvSyncCommandServiceProvider::class,
 	    Nox0121\LaravelUtilityCommand\LaravelUtilityCommandServiceProvider::class,
 	    ...
@@ -26,7 +24,5 @@
 1. `php artisan server:initial` - 初始化資料庫且執行 migration 和 ReleaseSeeder。
 2. `php artisan server:optimize` - 優化系統設定。 (包含 route/api/config cache)
 3. `php artisan server:no-optimize` - 移除優化系統設定。 (包含 route/api/config cache)
-4. `php artisan mysql:create-database` - 根據 .env 設定，建立資料庫。
-5. `php artisan mysql:dump-database` - 根據 .env 的資料庫及 `APP_STORAGE_PATH` 設定，傾倒資料庫。
-6. `php artisan mysql:mysql:restore-database` - 根據 .env 的資料庫及 `APP_STORAGE_PATH` 設定，還原資料庫。
-7. `php artisan env:sync {source} {destination}` - 同步 .env 設定檔。
+4. `php artisan db:create` - 建立資料庫。
+5. `php artisan env:sync {source} {destination}` - 同步 .env 設定檔。
