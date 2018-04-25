@@ -44,7 +44,7 @@ class ServerInitial extends Command
 
         $this->runArtisan('db:create');
         $this->runArtisan('migrate', ["--force" => true]);
-        $this->runArtisan('db:seed', ["--force" => true, "--class" => "ReleaseSeeder"]);
+        $this->runArtisan('db:seed', ["--force" => true, "--env" => "production"]);
     }
 
     /**
