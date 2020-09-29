@@ -5,6 +5,7 @@ namespace Nox0121\LaravelUtilityCommand\Commands;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Illuminate\Support\Arr;
 use Artisan;
 
 class ServerOptimize extends Command
@@ -47,7 +48,7 @@ class ServerOptimize extends Command
         $this->runArtisan('view:clear');
         $this->runArtisan('config:clear');
         $this->runArtisan('cache:clear');
-        $this->runArtisan('key:generate', ["--force" => true]);
+        $this->runArtisan('key:generate', ['--force' => true]);
         $this->runArtisan('route:cache');
 
         if ($this->commandExists('api:cache')) {
@@ -55,10 +56,6 @@ class ServerOptimize extends Command
         }
 
         $this->runArtisan('config:cache');
-
-        if ($this->commandExists('optimize')) {
-            $this->runArtisan('optimize', ["--force" => true]);
-        }
     }
 
     /**
@@ -68,7 +65,7 @@ class ServerOptimize extends Command
      */
     public function commandExists($name)
     {
-        return array_has(Artisan::all(), $name);
+        return Arr::has(Artisan::all(), $name);
     }
 
     /**
